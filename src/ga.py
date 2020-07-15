@@ -382,8 +382,8 @@ def generate_successors(population):
     # breed the remaining amount needed (pop - eliteAmt) randomly
     remainingPop = int((popAmt - eliteAmt)/2)
     for x in range(remainingPop):
-        ranPar1 = random.randint(eliteAmt, popAmt-1)
-        ranPar2 = random.randint(eliteAmt, popAmt-1)
+        ranPar1 = random.randint(0, popAmt-1)
+        ranPar2 = random.randint(0, popAmt-1)
         children = population[ranPar1].generate_children(population[ranPar2])
         results.append(children[0])
         results.append(children[1])
