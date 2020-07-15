@@ -371,13 +371,22 @@ def generate_successors(population):
     population.sort(key=lambda x: x.fitness(), reverse=True)
     popAmt = len(population)
 
-    #determine % of elite individuals
+    # determine % of elite individuals
     elitePercent = 1/10
     eliteAmt = int(popAmt * elitePercent)
 
     # fill in intial elite
     for x in range(eliteAmt):
         results.append(population[x])
+
+    # tournament to select another %
+    for x in range(eliteAmt):
+        contestants = []
+        for i in range(4):
+            contestants.append(population[int(random.random() \
+                                * (popAmt - eliteAmt)) + eliteAmt])
+        results.append(max(contestants, key=lambda x: x.fitness()))
+    eliteAmt *= 2
 
     # breed the remaining amount needed (pop - eliteAmt) randomly
     remainingPop = int((popAmt - eliteAmt)/2)
@@ -417,7 +426,7 @@ def ga():
         now = start
         print("Use ctrl-c to terminate this loop manually.")
         try:
-            while True:
+            while generation <= 20:
                 now = time.time()
                 # Print out statistics
                 if generation > 0:
