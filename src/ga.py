@@ -195,6 +195,12 @@ class Individual_DE(object):
         # STUDENT For example, too many stairs are unaesthetic.  Let's penalize that
         if len(list(filter(lambda de: de[1] == "6_stairs", self.genome))) > 5:
             penalties -= 2
+        # Incentivize lots of coins
+        if len(list(filter(lambda de: de[1] == "3_coin", self.genome))) > 10:
+            penalties += 4
+        # Heavily discourage too many pipes
+        if len(list(filter(lambda de: de[1] == "7_pipe", self.genome))) > 6:
+            penalties -= 4
         # STUDENT If you go for the FI-2POP extra credit, you can put constraint calculation in here too and cache it in a new entry in __slots__.
         self._fitness = sum(map(lambda m: coefficients[m] * measurements[m],
                                 coefficients)) + penalties
@@ -237,6 +243,10 @@ class Individual_DE(object):
                 new_de = (x, de_type, y, has_powerup)
             elif de_type == "3_coin":
                 y = de[2]
+                # 50% chance to add a coin in old spot before moving
+                # Should result in more coins next to each other
+                if random.random() > 0.5:
+                    heapq.heappush(new_genome, (x, de_type, y))
                 if choice < 0.5:
                     x = offset_by_upto(x, width / 8, min=1, max=width - 2)
                 else:
@@ -366,7 +376,7 @@ class Individual_DE(object):
         return Individual_DE(g)
 
 
-Individual = Individual_Grid
+Individual = Individual_DE
 
 
 def generate_successors(population):
