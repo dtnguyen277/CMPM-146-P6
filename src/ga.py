@@ -72,6 +72,8 @@ class Individual_Grid(object):
         right = width - 1
         for y in range(height):
             for x in range(left, right):
+                if random.random() < .001 and genome[y][x] != '-':
+                    genome[y][x] = options[random.randint(0, len(options)-4)]
                 pass
         return genome
 
@@ -101,7 +103,7 @@ class Individual_Grid(object):
                     liquid_genome[y][x] = other.genome[y][x]
                 flip = True
         # do mutation; note we're returning a one-element tuple here
-        return Individual_Grid(solid_genome), Individual_Grid(liquid_genome)
+        return Individual_Grid(self.mutate(solid_genome)), Individual_Grid(self.mutate(liquid_genome))
 
     # Turn the genome into a level string (easy for this genome)
     def to_level(self):
