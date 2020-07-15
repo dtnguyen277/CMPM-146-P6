@@ -348,14 +348,27 @@ def generate_successors(population):
     # STUDENT Design and implement this
     # Hint: Call generate_children() on some individuals and fill up results.
 
+    # sort based on decreasing order of fitness
     population.sort(key=lambda x: x.fitness(), reverse=True)
+    popAmt = len(population)
 
-    sampleSize = int(len(population))
-    for x in range(0, sampleSize, 2):
-        # print(population[x].fitness())
-        children = population[x].generate_children(population[x+1])
+    #determine % of elite individuals
+    elitePercent = 1/10
+    eliteAmt = int(popAmt * elitePercent)
+
+    # fill in intial elite
+    for x in range(eliteAmt):
+        results.append(population[x])
+
+    # breed the remaining amount needed (pop - eliteAmt) randomly
+    remainingPop = int((popAmt - eliteAmt)/2)
+    for x in range(remainingPop):
+        ranPar1 = random.randint(eliteAmt, popAmt-1)
+        ranPar2 = random.randint(eliteAmt, popAmt-1)
+        children = population[ranPar1].generate_children(population[ranPar2])
         results.append(children[0])
         results.append(children[1])
+
 
     return results
 
