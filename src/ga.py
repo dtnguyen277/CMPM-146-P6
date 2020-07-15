@@ -77,18 +77,31 @@ class Individual_Grid(object):
 
     # Create zero or more children from self and other
     def generate_children(self, other):
-        new_genome = copy.deepcopy(self.genome)
+        solid_genome = copy.deepcopy(self.genome)
+        liquid_genome = copy.deepcopy(self.genome)
         # Leaving first and last columns alone...
         # do crossover with other
         left = 1
         right = width - 1
-        for y in range(height):
-            for x in range(left, right):
-                # STUDENT Which one should you take?  Self, or other?  Why?
-                # STUDENT consider putting more constraints on this to prevent pipes in the air, etc
-                pass
+        flip = True
+        # Multi-point crossover: Starting with column from self,
+        # every other column of solid_genome is from other
+        # liquid_genome is the opposite of solid_genome
+        for x in range(left, right):
+            if flip:
+                # print("Changing solid column", x)
+                for y in range(height):
+                    # STUDENT Which one should you take?  Self, or other?  Why?
+                    # STUDENT consider putting more constraints on this to prevent pipes in the air, etc
+                    solid_genome[y][x] = other.genome[y][x]
+                flip = False
+            else:
+                # print("Changing liquid column", x)
+                for y in range(height):
+                    liquid_genome[y][x] = other.genome[y][x]
+                flip = True
         # do mutation; note we're returning a one-element tuple here
-        return (Individual_Grid(new_genome),)
+        return Individual_Grid(solid_genome), Individual_Grid(liquid_genome)
 
     # Turn the genome into a level string (easy for this genome)
     def to_level(self):
@@ -340,7 +353,7 @@ class Individual_DE(object):
         return Individual_DE(g)
 
 
-Individual = Individual_DE
+Individual = Individual_Grid
 
 
 def generate_successors(population):
