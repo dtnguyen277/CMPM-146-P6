@@ -73,6 +73,8 @@ class Individual_Grid(object):
         for y in range(height):
             for x in range(left, right):
                 if random.random() < .5 and genome[y][x] != '-':
+                    if random.random() < .9 and genome[y][x] == 'X':
+                        continue
                     if random.random() < .5:
                         genome[y][x] = options[0]
                     else:
