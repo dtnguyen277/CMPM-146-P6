@@ -67,6 +67,9 @@ class Individual_Grid(object):
         # STUDENT implement a mutation operator, also consider not mutating this individual
         # STUDENT also consider weighting the different tile types so it's not uniformly random
         # STUDENT consider putting more constraints on this to prevent pipes in the air, etc
+        genome[13][0] = '-'
+        genome[13][1] = '-'
+        genome[14][1] = '-'
 
         left = 1
         right = width - 1
@@ -79,9 +82,12 @@ class Individual_Grid(object):
                         genome[y][x] = options[0]
                     else:
                         genome[y][x] = options[random.randint(0, len(options)-4)]
+                #makes air gap 2 high so map isn't as blocked
                 if genome[y][x] == '-' and genome[y-1][x] != '-' and y != 0:
-                    if random.random() < .5:
-                        genome[y-1][x] = '-'
+                    genome[y-1][x] = '-'
+                #tops off pipes
+                if genome[y][x] == '|' and genome[y-1][x] != 'T' and y != 0:
+                    genome[y-1][x] = 'T'
                 pass
         return genome
 
