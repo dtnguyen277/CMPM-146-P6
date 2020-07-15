@@ -72,8 +72,11 @@ class Individual_Grid(object):
         right = width - 1
         for y in range(height):
             for x in range(left, right):
-                if random.random() < .001 and genome[y][x] != '-':
-                    genome[y][x] = options[random.randint(0, len(options)-4)]
+                if random.random() < .5 and genome[y][x] != '-':
+                    if random.random() < .5:
+                        genome[y][x] = options[0]
+                    else:
+                        genome[y][x] = options[random.randint(0, len(options)-4)]
                 pass
         return genome
 
@@ -85,23 +88,20 @@ class Individual_Grid(object):
         # do crossover with other
         left = 1
         right = width - 1
-        flip = True
+        chance = random.random()
         # Multi-point crossover: Starting with column from self,
         # every other column of solid_genome is from other
         # liquid_genome is the opposite of solid_genome
         for x in range(left, right):
-            if flip:
-                # print("Changing solid column", x)
+            if chance > 0.5:
                 for y in range(height):
                     # STUDENT Which one should you take?  Self, or other?  Why?
                     # STUDENT consider putting more constraints on this to prevent pipes in the air, etc
                     solid_genome[y][x] = other.genome[y][x]
-                flip = False
             else:
-                # print("Changing liquid column", x)
                 for y in range(height):
                     liquid_genome[y][x] = other.genome[y][x]
-                flip = True
+            chance = random.random()
         # do mutation; note we're returning a one-element tuple here
         return Individual_Grid(self.mutate(solid_genome)), Individual_Grid(self.mutate(liquid_genome))
 
