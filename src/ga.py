@@ -79,6 +79,8 @@ class Individual_Grid(object):
                         genome[y][x] = options[0]
                     else:
                         genome[y][x] = options[random.randint(0, len(options)-4)]
+                if genome[y][x] == '-' and genome[y-1][x] != '-' and y != 0:
+                    genome[y-1][x] = '-'
                 pass
         return genome
 
